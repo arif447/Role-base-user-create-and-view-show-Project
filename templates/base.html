@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>{% block title_block %}  {% endblock %}</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+           <a class="nav-link" href="{% url 'Account_App:index' %}">Home</a>
+        </li>
+
+
+        {% if request.user.is_authenticated and request.user.is_employee %}
+             <li class="nav-item active">
+                   <a class="nav-link" href="{% url 'Account_App:post' %}">Create Post</a>
+             </li>
+             <li class="nav-item active">
+                 <a class="nav-link" href="{% url 'Account_App:edit' %}">Edit</a>
+             </li>
+
+             <li class="nav-item active">
+               <a class="nav-link" href="{% url 'Account_App:logout' %}">Logout</a>
+             </li>
+
+        {% elif request.user.is_authenticated and request.user.is_customer %}
+            <li class="nav-item active">
+               <a class="nav-link" href="{% url 'Account_App:profile' %}">profile</a>
+            </li>
+            <li class="nav-item active">
+               <a class="nav-link" href="{% url 'Account_App:payment' %}">Payment</a>
+            </li>
+
+           <li class="nav-item active">
+               <a class="nav-link" href="{% url 'Account_App:logout' %}">Logout</a>
+           </li>
+
+        {% elif request.user.is_authenticated and request.user.is_admin %}
+
+           <li class="nav-item active">
+               <a class="nav-link" href="{% url 'Account_App:logout' %}">Logout</a>
+           </li>
+            <li class="nav-item active">
+               <a class="nav-link" href="{% url 'Account_App:payment' %}">Payment</a>
+            </li>
+
+        {% else %}
+
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'Account_App:register' %}">Sign Up</a>
+         </li>
+
+        <li class="nav-item active">
+              <a class="nav-link" href="{% url 'Account_App:login_view' %}">Login</a>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+<div class="container" style="padding-top:20px">
+<div class="messages container mt-2">
+{% if messages %}
+               {% for message in messages %}
+                   <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %} role="alert">
+                   {{ message }}
+                   <button type="button" class="close" data-dismiss="alert" aria-label="close" >
+                       <span aria-hidden="true">&times;</span></button>
+                   </div>
+               {% endfor %}
+           {% endif %}
+</div>
+{% block body_block %}
+
+{%  endblock %}
+</div>
+</body>
+</html>
+
+
